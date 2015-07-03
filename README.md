@@ -21,3 +21,7 @@ bundle
 3. Edit "config/secrets.yml" file, and set "secret_key_base". For the details, search about "config/secrets.yml".
 
 
+## Test
+
+Using browser, go to `http://localhost:3000/bookshare/api/v1/bookshelf/my`
+
