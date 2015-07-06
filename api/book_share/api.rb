@@ -14,6 +14,21 @@ module BookShare
       #   error!('401 Unauthorized', 401) unless current_user
       # end
     end
+	
+	resource :user do
+		desc "Create a new user."
+		params do
+				requires :info, type: String, desc: "Bookshelf information."
+		end
+		post do
+			# 新規作成
+			# authenticate!
+			# BookShelf.create!({
+			#                    user: current_user,
+			#                    info: params[:info]
+			#                })
+		end
+	end
 
     resource :bookshelf do
       desc "Return a my bookshelf."
