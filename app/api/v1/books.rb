@@ -3,6 +3,8 @@ module V1
 
 		# このクラス内で共通化出来る処理は helper に書く
     helpers do
+			include V1::Helpers    # emit_empty などを使えるようにする（必須）
+
 			def find_by_id id
 					book = Book.find_by id: id
 					emit_error 100, "指定した book_id が見つかりません" unless book
