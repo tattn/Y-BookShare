@@ -1,2 +1,2 @@
-json.bookId = book.id
-json.title = book.title
+json.bookId book.id
+json.title book.title
