@@ -2,6 +2,7 @@ module BookShare
   class API < Grape::API
     version 'v1', using: :path
     format :json
+		formatter :json, Grape::Formatter::Jbuilder
     prefix :api
 
     helpers do
@@ -14,7 +15,7 @@ module BookShare
       #   error!('401 Unauthorized', 401) unless current_user
       # end
     end
-	
+
 	resource :user do
 		desc "Create a new user."
 		params do
@@ -28,6 +29,18 @@ module BookShare
 			#                    info: params[:info]
 			#                })
 		end
+	end
+
+	resource :book do
+      desc "Add a new book."
+      params do
+        requires :title, type: String, desc: "Title of the book."
+      end
+			get do
+				unless Book.find_by title: params[:title]
+
+				end
+			end
 	end
 
     resource :bookshelf do

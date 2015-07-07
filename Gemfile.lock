@@ -71,6 +71,12 @@ GEM
       rack-accept
       rack-mount
       virtus (>= 1.0.0)
+    grape-jbuilder (0.2.0)
+      grape (>= 0.3)
+      i18n
+      jbuilder
+      tilt
+      tilt-jbuilder (>= 0.4.0)
     hashie (3.4.2)
     i18n (0.7.0)
     ice_nine (0.11.1)
@@ -156,6 +162,9 @@ GEM
     thor (0.19.1)
     thread_safe (0.3.5)
     tilt (1.4.1)
+    tilt-jbuilder (0.6.1)
+      jbuilder
+      tilt (<= 1.5.0)
     turbolinks (2.5.3)
       coffee-rails
     tzinfo (1.2.2)
@@ -183,6 +192,7 @@ PLATFORMS
 DEPENDENCIES
   coffee-rails (~> 4.1.0)
   grape
+  grape-jbuilder
   jbuilder (~> 2.0)
   jquery-rails
   rails (= 4.2.1)
