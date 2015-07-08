@@ -17,13 +17,18 @@ module V1
 			desc "Add a new book." # このAPIの説明
 			params do              # このAPIに必要なパラメータ(require は必須, optional はなくてもいい引数)
 				requires :title, type: String, desc: "Title of the book."
+				optional :genre_id, type: Integer, desc: "GenreID of the book."
 			end
 			post do                # HTTP メソッド名
 				if Book.find_by title: params[:title]
 					emit_error 1, "すでに登録されているタイトル" # エラーを吐く場合はこのメソッドを使う(参照: api/v1/root.rb)
 				else
 					# status 201
-					Book.create title: params[:title]
+					if params[:genre_id]
+						Book.create title: params[:title], genre_id: params[:genre_id]
+					else
+						Book.create title: params[:title]
+					end
 					emit_empty                                   # 出力がない場合はこのメソッドを使う(参照: api/v1/root.rb)
 				end
 			end
