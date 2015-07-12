@@ -1,3 +1,5 @@
+require 'foreign'
+
 module V1
 	class Books < Grape::API
 
@@ -36,15 +38,28 @@ module V1
 			#TODO: タイトルの全文検索をできるようにするべき
 			desc "Search books."
 			params do
-				optional :book_id, type: Integer, desc: "BookID"
 				optional :title, type: String, desc: "Title of the book."
+				optional :amazon, type: Integer, desc: "search in amazon if this parameter exists"
 			end
 			get '/search', jbuilder: 'books/books' do        # jbuilderで出力する場合はこのように書く(参照: views/api)
 				@books = []
-				book = Book.find_by(id: params[:book_id])
-				@books << book if book
-				book = Book.find_by(title: params[:title])
-				@books << book if book
+				if title = params[:title]
+					book = Book.find_by title: title
+					@books << book if book
+
+					# データベースにない、またはパラメータによって指定されていれば、アマゾンで検索して結果を保存
+					if !book or params[:amazon]
+						Foreign.search_book title do |item|
+							if item[:isbn]
+								book = Book.find_or_initialize_by isbn: item[:isbn]
+							else
+								book = Book.find_or_initialize_by title: item[:title]
+							end
+							book.update item
+							@books << book
+						end
+					end
+				end
 			end
 
 			params do
