@@ -1,3 +1,6 @@
 json.bookId book.id
 json.title book.title
+json.isbn book.isbn
+json.author book.author
+json.manufacturer book.manufacturer
 json.genreId book.genre_id
