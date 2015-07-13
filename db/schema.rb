@@ -11,7 +11,18 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150706234230) do
+ActiveRecord::Schema.define(version: 20150713140703) do
+
+  create_table "api_keys", force: :cascade do |t|
+    t.string   "access_token"
+    t.datetime "expires_at"
+    t.integer  "user_id"
+    t.datetime "created_at",   null: false
+    t.datetime "updated_at",   null: false
+  end
+
+  add_index "api_keys", ["access_token"], name: "index_api_keys_on_access_token", unique: true
+  add_index "api_keys", ["user_id"], name: "index_api_keys_on_user_id"
 
   create_table "blacklists", force: :cascade do |t|
     t.integer  "user_id",    null: false
@@ -92,6 +103,7 @@ ActiveRecord::Schema.define(version: 20150706234230) do
     t.integer  "lend_num"
     t.integer  "borrow_num"
     t.string   "invitation_code", null: false
+    t.string   "password_digest"
     t.datetime "created_at",      null: false
     t.datetime "updated_at",      null: false
   end

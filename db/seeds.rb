@@ -35,3 +35,16 @@ FactoryGirl.create_list(:borrow,100)
 # create genrelist
 FactoryGirl.create_list(:genrelist,100)
 
+
+
+# Administrator for test
+User.create!(
+	email: 'admin@admin.jp',
+	firstname: 'admin',
+	lastname: 'admin',
+	school: '青山学院大学',
+	lend_num: 5,
+	borrow_num: 3,
+	password: 'admin',
+	invitation_code: 'admin'
+)
