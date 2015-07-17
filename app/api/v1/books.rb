@@ -46,7 +46,7 @@ module V1
 				if title = params[:title]
 					book = Book.find_by title: title
 					@books << book if book
-
+					
 					# データベースにない、またはパラメータによって指定されていれば、アマゾンで検索して結果を保存
 					if !book or params[:amazon]
 						Foreign.search_book title do |item|
@@ -59,6 +59,7 @@ module V1
 							@books << book
 						end
 					end
+
 				end
 			end
 
@@ -90,7 +91,6 @@ module V1
 					@book.destroy
 					emit_empty
 				end
-
 			end
 
 		end
