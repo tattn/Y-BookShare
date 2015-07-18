@@ -14,7 +14,7 @@ module V1
     	end
 
 		resource :users do
-			
+
 			desc "Add a new user." 
 			params do             
 				requires :user_id, type: Integer, desc: "user id"
@@ -23,19 +23,19 @@ module V1
 				requires :lastname, type: String, desc: "lastname of the user"
 				optional :school, type: String, desc: "school of the user"
 			end
-
 			post do              
-				if find_by_id params[:user_id]
+				if User.find_by user_id: params[:user_id]
 					emit_error "すでに登録されているID", 400, 1
 				else
 					if params[:school]
-						User.create user_id: params[:user_id], email: params[:email], firstname: params[:firstname], school: params[:school]
+						User.create user_id: params[:user_id], email: params[:email], firstname: params[:firstname], lastname: params[:lastname], school: params[:school]
 					else
-						User.create user_id: params[:user_id], email: params[:email], firstname: params[:firstname]
+						User.create user_id: params[:user_id], email: params[:email], firstname: params[:firstname], lastname: params[:lastname]
 					end
-					emit_empty                                   
+					emit_empty                               
 				end
 			end
+
 
 			params do
 				requires :user_id, type:Integer, desc: "user id"
@@ -59,13 +59,27 @@ module V1
 				put '/' do
 					@user = find_by_id params[:user_id]
 					return unless @user
-					@user.update email: params[:email]
-					@user.update firstname: params[:firstname]
-					@user.update lastname: params[:lastname]
-					@user.update school: params[:school]
-					@user.update lend_num: params[:lend_num]
-					@user.update borrow_num: params[:borrow_num]
-					@user.update invitation_code: params[:invitation_code]
+					if params[:email]
+						@user.update email: params[:email]
+					end
+					if params[:firstname]
+						@user.update firstname: params[:firstname]
+					end
+					if params[:lastname]
+						@user.update lastname: params[:lastname]
+					end
+					if params[:school] 
+						@user.update school: params[:school]
+					end
+					if params[:lend_num]
+						@user.update lend_num: params[:lend_num]
+					end
+					if params[:borrow_num]
+						@user.update borrow_num: params[:borrow_num]
+					end
+					if params[:invitation_code]
+						@user.update invitation_code: params[:invitation_code]
+					end
 					emit_empty
 				end
 
@@ -86,6 +100,40 @@ module V1
 					friend = Friend.where(user_id: user.user_id, accepted: true).map(&:friend_id)
 					@users =  User.where(id: friend)
 				end
+
+				desc "Add a new friend." 
+				params do              
+					requires :token, type: String, desc: "Access token"
+					requires :friend_id, type: Integer, desc: "friend id"
+				end
+				post do               
+					user = authenticate!
+					if Friend.find_by user_id: user.id, friend_id: params[:friend_id]
+						emit_error "すでに登録されている友達", 400, 1 
+					else
+						Friend.create user_id: user.id, friend_id: params[:friend_id], accepted: false
+						emit_empty                              
+					end
+				end
+				params do
+					requires :token, type: String, desc: "Access token"
+					requires :friend_id, type: Integer, desc: "friend id"
+				end
+				route_param :friend_id do
+					desc "Delete a friend."
+					delete '/' do
+						user = authenticate!
+						@friend = Friend.find_by user_id: user.id, friend_id: params[:friend_id], accepted: true
+						@partner = Friend.find_by  user_id: params[:friend_id],friend_id: user.id, accepted: true
+						return unless @friend
+						return unless @partner
+						@friend.destroy
+						@partner.destroy
+						emit_empty
+					end
+				end
+
+
 			end
 		end
 	end
