@@ -2,6 +2,7 @@ class CreateUsers < ActiveRecord::Migration
   def change
     create_table :users do |t|
       t.integer :user_id, :null => false
+     # add_index :users, :user_id, :null => false
       t.string :email, :null => false
       t.string :firstname, :null => false
       t.string :lastname, :null => false
@@ -9,7 +10,7 @@ class CreateUsers < ActiveRecord::Migration
       t.integer :lend_num
       t.integer :borrow_num
       t.string :invitation_code, :null => false
-	  t.string :password_digest
+	    t.string :password_digest
 
       t.timestamps null: false
     end

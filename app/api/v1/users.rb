@@ -36,11 +36,12 @@ module V1
 				end
 			end
 
-
 			params do
 				requires :user_id, type:Integer, desc: "user id"
 			end
 			route_param :user_id do
+
+
 				desc "Get a user"
 				get '/', jbuilder: 'users/user' do
 					@user = find_by_id params[:user_id]
@@ -91,51 +92,54 @@ module V1
 					emit_empty
 				end
 
-				desc "get the friends list"
-				params do
-					requires :token, type: String, desc: "Access token"
-				end
-				get '/friend', jbuilder: 'users/users' do
-					user = authenticate!
-					friend = Friend.where(user_id: user.user_id, accepted: true).map(&:friend_id)
-					@users =  User.where(id: friend)
-				end
-
-				desc "Add a new friend." 
-				params do              
-					requires :token, type: String, desc: "Access token"
-					requires :friend_id, type: Integer, desc: "friend id"
-				end
-				post do               
-					user = authenticate!
-					if Friend.find_by user_id: user.id, friend_id: params[:friend_id]
-						emit_error "すでに登録されている友達", 400, 1 
-					else
-						Friend.create user_id: user.id, friend_id: params[:friend_id], accepted: false
-						emit_empty                              
+				resource :friend do
+					desc "get the friends list"
+					params do
+						requires :token, type: String, desc: "Access token"
 					end
-				end
-				params do
-					requires :token, type: String, desc: "Access token"
-					requires :friend_id, type: Integer, desc: "friend id"
-				end
-				route_param :friend_id do
-					desc "Delete a friend."
-					delete '/' do
+					get '/', jbuilder: 'users/users' do
 						user = authenticate!
-						@friend = Friend.find_by user_id: user.id, friend_id: params[:friend_id], accepted: true
-						@partner = Friend.find_by  user_id: params[:friend_id],friend_id: user.id, accepted: true
-						return unless @friend
-						return unless @partner
-						@friend.destroy
-						@partner.destroy
-						emit_empty
+						friend = Friend.where(user_id: user.user_id, accepted: true).map(&:friend_id)
+						@users =  User.where(user_id: friend)
 					end
+
+					desc "Add a new friend." 
+					params do              
+						requires :token, type: String, desc: "Access token"
+						requires :friend_id, type: Integer, desc: "friend id"
+					end
+					post do               
+						user = authenticate!
+						if Friend.find_by user_id: user.user_id, friend_id: params[:friend_id]
+							emit_error "すでに登録されている友達", 400, 1 
+						else
+							Friend.create user_id: user.user_id, friend_id: params[:friend_id], accepted: false
+							emit_empty                              
+						end
+					end
+
+					params do
+						requires :token, type: String, desc: "Access token"
+						requires :friend_id, type: Integer, desc: "friend id"
+					end
+					route_param :friend_id do
+						desc "Delete a friend."
+						delete '/' do
+							user = authenticate!
+							@friend = Friend.find_by user_id: user.user_id, friend_id: params[:friend_id], accepted: true
+							@partner = Friend.find_by  user_id: params[:friend_id],friend_id: user.user_id, accepted: true
+							unless @friend then
+								emit_error
+							else
+								@friend.destroy
+								@partner.destroy
+								emit_empty
+							end	
+						end
+					end
+
 				end
-
-
 			end
 		end
 	end
 end
-
