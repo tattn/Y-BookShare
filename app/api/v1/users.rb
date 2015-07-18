@@ -6,10 +6,10 @@ module V1
 		# このクラス内で共通化出来る処理は helper に書く
     	helpers do
 			include V1::Helpers    # emit_empty などを使えるようにする（必須）
-			def find_by_id id
-					user = User.find_by id: id
-					emit_error "指定した user_id が見つかりません", 400, 1 unless user
-				    user
+			def find_by_id user_id
+				user = User.find_by user_id: user_id
+				emit_error "指定した user_id が見つかりません", 400, 1 unless user
+				user
 			end
     	end
 
@@ -25,15 +25,13 @@ module V1
 			end
 
 			post do              
-				if Userid.find_by user_id: params[:user_id]
+				if find_by_id params[:user_id]
 					emit_error "すでに登録されているID", 400, 1
 				else
 					if params[:school]
-						Userid.create user_id: params[:user_id]
-						User.create email: params[:email], firstname: params[:firstname], school: params[:school]
+						User.create user_id: params[:user_id], email: params[:email], firstname: params[:firstname], school: params[:school]
 					else
-						Userid.create user_id: params[:user_id]
-						User.create email: params[:email], firstname: params[:firstname]
+						User.create user_id: params[:user_id], email: params[:email], firstname: params[:firstname]
 					end
 					emit_empty                                   
 				end
@@ -50,13 +48,13 @@ module V1
 
 				desc "Change property of a user."
 				params do
-					requires :email, type: String, desc: "e-mail address"
-					requires :firstname, type: String, desc: "firstname of the user"
-					requires :lastname, type: String, desc: "lastname of the user"
-					requires :school, type: String, desc: "school of the user"
-					requires :lend_num, type: Integer, desc: "The number that the user has lent a book"
-					requires :borrow_num, type: Integer, desc: "The number that the user has borrowed a book"
-					requires :invitation_code, type: String, desc: "invitation code"
+					optional :email, type: String, desc: "e-mail address"
+					optional :firstname, type: String, desc: "firstname of the user"
+					optional :lastname, type: String, desc: "lastname of the user"
+					optional :school, type: String, desc: "school of the user"
+					optional :lend_num, type: Integer, desc: "The number that the user has lent a book"
+					optional :borrow_num, type: Integer, desc: "The number that the user has borrowed a book"
+					optional :invitation_code, type: String, desc: "invitation code"
 				end
 				put '/' do
 					@user = find_by_id params[:user_id]
@@ -84,8 +82,8 @@ module V1
 					requires :token, type: String, desc: "Access token"
 				end
 				get '/friend', jbuilder: 'users/users' do
-					authenticate!
-					friend = Friend.where(user_id: params[:user_id], accepted: true).map(&:friend_id)
+					user = authenticate!
+					friend = Friend.where(user_id: user.user_id, accepted: true).map(&:friend_id)
 					@users =  User.where(id: friend)
 				end
 			end
