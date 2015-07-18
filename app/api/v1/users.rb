@@ -41,7 +41,6 @@ module V1
 			end
 			route_param :user_id do
 
-
 				desc "Get a user"
 				get '/', jbuilder: 'users/user' do
 					@user = find_by_id params[:user_id]
@@ -129,7 +128,7 @@ module V1
 							@friend = Friend.find_by user_id: user.user_id, friend_id: params[:friend_id], accepted: true
 							@partner = Friend.find_by  user_id: params[:friend_id],friend_id: user.user_id, accepted: true
 							unless @friend then
-								emit_error
+								emit_error "存在しない友達"
 							else
 								@friend.destroy
 								@partner.destroy
