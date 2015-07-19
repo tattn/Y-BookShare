@@ -157,10 +157,13 @@ module V1
 							put '/' do
 								user = authenticate!
 								@friend = Friend.find_by user_id: params[:friend_id], friend_id: user.user_id
-								return unless @friend
-								@friend.update accepted: true
-								Friend.create user_id: user.user_id, friend_id: params[:friend_id], accepted: true
-								emit_empty
+								unless @friend then
+									emit_empty
+								else	
+									@friend.update accepted: true
+									Friend.create user_id: user.user_id, friend_id: params[:friend_id], accepted: true
+									emit_empty
+								end
 							end
 
 							desc "reject friend request"
