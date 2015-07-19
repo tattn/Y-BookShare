@@ -14,7 +14,6 @@ module V1
     	end
 
 		resource :users do
-
 			desc "Add a new user." 
 			params do             
 				requires :user_id, type: Integer, desc: "user id"
@@ -126,14 +125,56 @@ module V1
 						delete '/' do
 							user = authenticate!
 							@friend = Friend.find_by user_id: user.user_id, friend_id: params[:friend_id], accepted: true
-							@partner = Friend.find_by  user_id: params[:friend_id],friend_id: user.user_id, accepted: true
+							@partner = Friend.find_by  user_id: user.user_id,friend_id: params[:user_id], accepted: true
 							unless @friend then
-								emit_error "存在しない友達"
+								emit_error "存在しない友達", 400, 1
 							else
 								@friend.destroy
 								@partner.destroy
 								emit_empty
 							end	
+						end
+					end
+
+					resource :new do
+						desc "get the applicants"
+						params do
+							requires :token, type: String, desc: "Access token"
+						end
+						get '/', jbuilder: 'users/users' do
+							user = authenticate!
+							applicants = Friend.where(friend_id: user.user_id, accepted: false).map(&:user_id)
+							@users =  User.where(user_id: applicants)
+						end
+
+						params do
+							requires :token, type: String, desc: "Access token"
+							requires :friend_id, type: Integer, desc: "friend id"
+						end
+						route_param :friend_id do
+
+							desc "follow back"
+							put '/' do
+								user = authenticate!
+								@friend = Friend.find_by user_id: params[:friend_id], friend_id: user.user_id
+								return unless @friend
+								@friend.update accepted: true
+								Friend.create user_id: user.user_id, friend_id: params[:friend_id], accepted: true
+								emit_empty
+							end
+
+							desc "reject friend request"
+							delete '/' do
+								user = authenticate!
+								@request = Friend.find_by user_id: params[:friend_id], friend_id: user.user_id, accepted: false
+								unless @request then
+									emit_error "存在しない友達申請", 400, 1
+								else
+									@request.destroy
+									emit_empty
+								end	
+							end
+
 						end
 					end
 
