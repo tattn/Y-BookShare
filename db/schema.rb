@@ -32,13 +32,14 @@ ActiveRecord::Schema.define(version: 20150713140703) do
   end
 
   create_table "books", force: :cascade do |t|
-    t.string   "title",                  null: false
-    t.integer  "isbn",         limit: 8
+    t.string   "title",                     null: false
+    t.integer  "isbn",            limit: 8
     t.string   "author"
     t.string   "manufacturer"
     t.integer  "genre_id"
-    t.datetime "created_at",             null: false
-    t.datetime "updated_at",             null: false
+    t.string   "cover_image_url"
+    t.datetime "created_at",                null: false
+    t.datetime "updated_at",                null: false
   end
 
   create_table "bookshelves", force: :cascade do |t|
