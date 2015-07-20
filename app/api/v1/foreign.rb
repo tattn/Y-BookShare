@@ -33,7 +33,7 @@ module V1
 					# :small_image => item.get_hash("SmallImage"),#{"URL"=>"http://ecx.images-amazon.com/images/I/51-urJOxFzL._SL75_.jpg", "Height"=>"75", "Width"=>"53"}
 					# :medium_image => item.get_hash("MediumImage"),
 					# :large_image => item.get_hash("LargeImage")
-					:cover_image_url => item.get_hash("MediumImage"),
+					:cover_image_url => item.get_hash("MediumImage")["URL"],
 				}
 
 				yield data
