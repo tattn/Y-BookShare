@@ -1,5 +1,5 @@
 require 'factory_girl'
-Dir[Rails.root.join('spec/support/factories/*.rb')].each {|f| require f}
+Dir[Rails.root.join('db/spec/support/factories/*.rb')].each {|f| require f}
 
 Genre.delete_all
 Book.delete_all
@@ -33,7 +33,7 @@ FactoryGirl.create_list(:request,3)
 
 # Administrator for test
 User.create!(
-	user_id: 12345678,
+	user_id: 0,
 	email: 'admin@admin.jp',
 	firstname: 'admin',
 	lastname: 'admin',

@@ -16,8 +16,8 @@ module V1
 		resource :users do
 			desc "Add a new user." 
 			params do             
-				requires :user_id, type: Integer, desc: "user id"
 				requires :email, type: String, desc: "e-mail address"
+				requires :password, type: String, desc: "password"
 				requires :firstname, type: String, desc: "firstname of the user"
 				requires :lastname, type: String, desc: "lastname of the user"
 				optional :school, type: String, desc: "school of the user"
@@ -26,10 +26,11 @@ module V1
 				if User.find_by user_id: params[:user_id]
 					emit_error "すでに登録されているID", 400, 1
 				else
+					new_id = User.maximum(:user_id) + 1
 					if params[:school]
-						User.create user_id: params[:user_id], email: params[:email], firstname: params[:firstname], lastname: params[:lastname], school: params[:school]
+						User.create user_id: new_id, email: params[:email], password: params[:password], firstname: params[:firstname], lastname: params[:lastname], school: params[:school]
 					else
-						User.create user_id: params[:user_id], email: params[:email], firstname: params[:firstname], lastname: params[:lastname]
+						User.create user_id: new_id, email: params[:email], password: params[:password], firstname: params[:firstname], lastname: params[:lastname]
 					end
 					emit_empty                               
 				end
@@ -58,27 +59,13 @@ module V1
 				put '/' do
 					@user = find_by_id params[:user_id]
 					return unless @user
-					if params[:email]
-						@user.update email: params[:email]
-					end
-					if params[:firstname]
-						@user.update firstname: params[:firstname]
-					end
-					if params[:lastname]
-						@user.update lastname: params[:lastname]
-					end
-					if params[:school] 
-						@user.update school: params[:school]
-					end
-					if params[:lend_num]
-						@user.update lend_num: params[:lend_num]
-					end
-					if params[:borrow_num]
-						@user.update borrow_num: params[:borrow_num]
-					end
-					if params[:invitation_code]
-						@user.update invitation_code: params[:invitation_code]
-					end
+						@user.update email: params[:email] if params[:email]
+						@user.update firstname: params[:firstname] if params[:firstname]
+						@user.update lastname: params[:lastname] if params[:lastname]
+						@user.update school: params[:school] if params[:school] 
+						@user.update lend_num: params[:lend_num] if params[:lend_num]
+						@user.update borrow_num: params[:borrow_num] if params[:borrow_num]
+						@user.update invitation_code: params[:invitation_code] if params[:invitation_code]
 					emit_empty
 				end
 
