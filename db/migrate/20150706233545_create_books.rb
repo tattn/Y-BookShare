@@ -6,6 +6,7 @@ class CreateBooks < ActiveRecord::Migration
 			t.string :author
 			t.string :manufacturer
       t.integer :genre_id, :null => true
+			t.string :cover_image_url
       t.timestamps null: false
     end
   end

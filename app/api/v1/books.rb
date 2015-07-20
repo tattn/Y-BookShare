@@ -9,7 +9,7 @@ module V1
 
 			def find_by_id id
 					book = Book.find_by id: id
-					emit_error 100, "指定した book_id が見つかりません" unless book
+					emit_error "指定した book_id が見つかりません", 400, 1 unless book
 					book
 			end
     end
@@ -23,7 +23,7 @@ module V1
 			end
 			post do                # HTTP メソッド名
 				if Book.find_by title: params[:title]
-					emit_error 1, "すでに登録されているタイトル" # エラーを吐く場合はこのメソッドを使う(参照: api/v1/root.rb)
+					emit_error "すでに登録されているタイトル", 400, 1 # エラーを吐く場合はこのメソッドを使う(参照: api/v1/root.rb)
 				else
 					# status 201
 					if params[:genre_id]
