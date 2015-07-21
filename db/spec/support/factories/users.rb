@@ -6,6 +6,7 @@ FactoryGirl.define do
   lastname = ["坂本","田中","山本","小倉","原田"]
 
   factory :user do
+  	sequence(:user_id) {|n| n}	
 	sequence(:email) {|n| "email#{n}@***.com"}
 	firstname {firstname.pop}
 	lastname {lastname.pop}

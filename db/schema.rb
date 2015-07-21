@@ -47,6 +47,7 @@ ActiveRecord::Schema.define(version: 20150713140703) do
     t.integer  "book_id",     null: false
     t.integer  "borrower_id", null: false
     t.integer  "rate"
+    t.string   "comment"
     t.datetime "created_at",  null: false
     t.datetime "updated_at",  null: false
   end
@@ -90,13 +91,8 @@ ActiveRecord::Schema.define(version: 20150713140703) do
     t.datetime "updated_at", null: false
   end
 
-  create_table "userids", force: :cascade do |t|
-    t.integer  "user_id",    null: false
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-  end
-
   create_table "users", force: :cascade do |t|
+    t.integer  "user_id",         null: false
     t.string   "email",           null: false
     t.string   "firstname",       null: false
     t.string   "lastname",        null: false
@@ -108,5 +104,7 @@ ActiveRecord::Schema.define(version: 20150713140703) do
     t.datetime "created_at",      null: false
     t.datetime "updated_at",      null: false
   end
+
+  add_index "users", ["user_id"], name: "index_users_on_user_id", unique: true
 
 end

@@ -1,7 +1,7 @@
 def genrelist_ids
 	return @genrelist_ids if @genrelist_ids
 
-	userid_list = User.all.to_a.map(&:id)
+	userid_list = User.all.to_a.map(&:user_id)
 	genreid_list = Genre.all.to_a.map(&:id)
 	@genrelist_ids = userid_list.product(genreid_list).to_a
 end

@@ -5,6 +5,7 @@ class CreateBookshelves < ActiveRecord::Migration
       t.integer :book_id, :null => false 
       t.integer :borrower_id, :null => false 
       t.integer :rate
+      t.string  :comment
 
       t.timestamps null: false
     end

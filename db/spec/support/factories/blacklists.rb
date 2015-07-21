@@ -1,7 +1,7 @@
 def blacklist_id
 	return @blacklist_id if @blacklist_id
 
-	userid_list = User.all.to_a.map(&:id)
+	userid_list = User.all.to_a.map(&:user_id)
 	userid_list = userid_list.permutation(2).to_a
 	user_list = Friend.all.to_a.map(&:user_id)
 	friend_list = Friend.all.to_a.map(&:friend_id)
