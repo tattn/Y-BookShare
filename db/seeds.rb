@@ -26,21 +26,21 @@ FactoryGirl.create_list(:mutual_friend,5)
 FactoryGirl.create_list(:genrelist,10)
 # create black list
 FactoryGirl.create(:blacklist)
-# create borrow 
+# create borrow
 FactoryGirl.create(:borrow)
 # create request
 FactoryGirl.create_list(:request,3)
 
 # Administrator for test
-User.create!(
-	user_id: 0,
-	email: 'admin@admin.jp',
-	firstname: 'admin',
-	lastname: 'admin',
-	school: '青山学院大学',
-	lend_num: 5,
-	borrow_num: 3,
-	password: 'admin',
-	invitation_code: 'admin'
-)
+#User.create!(
+#	user_id: 0,
+#	email: 'admin@admin.jp',
+#	firstname: 'admin',
+#	lastname: 'admin',
+#	school: '青山学院大学',
+#	lend_num: 5,
+#	borrow_num: 3,
+#	password: 'admin',
+#	invitation_code: 'admin'
+#)
 
