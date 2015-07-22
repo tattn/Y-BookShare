@@ -40,6 +40,7 @@ module V1
     mount V1::Books
     mount V1::Auth
     mount V1::Users
+    mount V1::Bookshelves
   end
 end
 
