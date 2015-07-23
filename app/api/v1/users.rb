@@ -145,8 +145,45 @@ module V1
 
             end
           end
-
         end
+
+        resource :borrow do
+          get '/', jbuilder: 'books/books' do
+            authenticate!
+            borrow_id = Bookshelf.where(borrower_id: @current_user.user_id).map(&:book_id)
+            @books = Book.where(id: borrow_id)
+          end
+
+          params do
+            requires :book_id, type: Integer, desc: "book id"
+            requires :lender_id, type: Integer, desc: "lender id"
+            #optional :due_date, type: String, desc: "due date"
+          end
+          post '/', jbuilder: 'empty' do
+            authenticate!
+            @borrow_book = Bookshelf.find_by user_id: params[:lender_id], book_id: params[:book_id]
+            emit_error! "存在しない本を借りようとしています", 400, 1 unless @borrow_book
+
+            if @borrow_book.borrower_id == 0
+              @borrow_book.update borrower_id: @current_user.user_id
+            else
+              emit_error! "すでに借りられている本を借りようとしています", 400, 1
+            end
+          end
+
+          params do
+            requires :book_id, type: Integer, desc: "book id"
+          end
+          route_param :book_id do
+            delete '/', jbuilder: 'empty' do
+              authenticate!
+              @borrow_book = Bookshelf.find_by borrower_id: @current_user.user_id, book_id: params[:book_id]
+              emit_error! "存在しない本の削除", 400, 1 unless @borrow_book
+              @borrow_book.update borrower_id: 0
+            end
+          end
+        end
+
       end
     end
   end
