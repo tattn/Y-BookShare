@@ -21,10 +21,15 @@ module V1
 
     resource :bookshelves do
 
+	  get :test do
+		Bookshelf.all
+	  end
+
       params do
         requires :user_id, type: Integer, desc: "UserID"
       end
       route_param :user_id do
+
 
         desc "Get a bookshelf."
         get '/' , jbuilder: 'bookshelves/bookshelves' do
