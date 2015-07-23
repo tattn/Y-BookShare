@@ -7,17 +7,14 @@ module V1
     helpers do
 			include V1::Helpers    # emit_empty などを使えるようにする（必須）
 
-			def find_by_id (userid, bookid)
-					bookshelf = Bookshelf.find_by user_id: userid, book_id: bookid
-					emit_error "指定した book_id が見つかりません", 400, 1 unless bookshelf
-					bookshelf
+			def find_by_id user_id, book_id
+					@bookshelf = Bookshelf.find_by user_id: user_id, book_id: book_id
+					emit_error "指定した user_id または book_id が見つかりません", 400, 1 unless @bookshelf
+					@bookshelf
 			end
     end
 
 		resource :bookshelves do
-			get :test do
-				Bookshelf.all
-			end
 
 			params do
 				requires :user_id, type: Integer, desc: "UserID"
@@ -26,7 +23,7 @@ module V1
 
 				desc "Get a bookshelf."
 				get '/' , jbuilder: 'bookshelves/bookshelves' do
-					@bookshelves = Bookshelf.where(user_id: params[:user_id])
+					@bookshelves = Bookshelf.where user_id: params[:user_id]
 				end
 
 				desc "post a bookshelf"
@@ -46,15 +43,13 @@ module V1
 						optional :book_id, type: Integer, desc: "bookID"
 						optional :title, type: String, desc: "title of the book"
 					end
-					get '/' , jbuilder: 'books/books' do
+					get '/' , jbuilder: 'bookshelves/bookshelves' do#'books/books' do
 						if params[:book_id]
-							book_by_id = Bookshelf.find_by( user_id: params[:user_id], book_id: params[:book_id])
-							@books = Book.where(id: book_by_id)
+							@bookshelves = Bookshelf.where( user_id: params[:user_id], book_id: params[:book_id])
 						else
 							if params[:title]  #sample:   http://localhost:3000/bookshare/api/v1/bookshelves/1/search?title=Book1
-								book_by_title = Book.where("title like '%" + params[:title] + "%'").map(&:id)
-								book_by_title = Bookshelf.where(book_id: book_by_title).map(&:book_id)
-								@books = Book.where(id: book_by_title)
+								id_by_title = Book.where("title like '%" + params[:title] + "%'").map(&:id)
+								@bookshelves = Bookshelf.where(user_id: params[:user_id], book_id: id_by_title)
 							end
 						end
 					end
@@ -75,14 +70,8 @@ module V1
 				end
 				route_param :book_id do
 
-					get '/', jbuilder: 'books/book' do
-						book_by_id = Bookshelf.where(user_id: params[:user_id]).map(&:book_id)
-
-						if book_by_id.include?(params[:book_id])
-							@book = Book.find_by id: params[:book_id]
-						else
-							emit_error! "存在しない本", 400, 1
-						end
+					get '/', jbuilder: 'bookshelves/bookshelf' do #'books/book' do
+						@bookshelf = find_by_id params[:user_id], params[:book_id]
 					end
 
 					desc "Change property of a book on bookshelf."
@@ -92,7 +81,7 @@ module V1
 						optional :comment, type: String, desc: "review of book"
 					end
 					put '/', jbuilder: 'empty' do
-						@bookshelf = Bookshelf.find_by user_id: params[:user_id], book_id: params[:book_id]
+						@bookshelf = find_by_id params[:user_id], params[:book_id]
 						return unless @bookshelf
 						if params[:borrower_id]
 							@bookshelf.update borrower_id: params[:borrower_id]
@@ -107,7 +96,7 @@ module V1
 
 					desc "Delete a book on bookshelf."
 					delete '/', jbuilder: 'empty' do
-						@bookshelf = Bookshelf.find_by user_id: params[:user_id], book_id: params[:book_id]
+						@bookshelf = find_by_id params[:user_id], params[:book_id]
 						return unless @bookshelf
 						@bookshelf.destroy
 					end
