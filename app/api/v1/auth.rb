@@ -22,6 +22,16 @@ module V1
 				end
 			end
 
+			desc "Sign out"
+			params do
+				requires :token, type: String, desc: "Access token"
+			end
+			post :logout, jbuilder: 'empty' do
+				authenticate!
+        key = ApiKey.where(access_token: params[:token]).first
+        key.destroy
+			end
+
 			desc "Try login using access token. This api exists for DEBUGGGGGGGGGGG"
 			params do
 				requires :token, type: String, desc: "Access token"
