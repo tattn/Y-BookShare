@@ -1,16 +1,14 @@
-require 'foreign'
-require 'securerandom'
 
 module V1
   class Blacklists < Grape::API
     # このクラス内で共通化出来る処理は helper に書く
     helpers do
       include V1::Helpers    # emit_empty などを使えるようにする（必須）
-      params :token do
-        requires :token, type: String, desc: "Access token"
-      end
     end
 
+    params :token do
+      requires :token, type: String, desc: "Access token"
+    end
     resource :my do
       resource :blacklist do
         desc "get a blacklist"
