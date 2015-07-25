@@ -6,7 +6,7 @@ module V1
       include V1::Helpers    # emit_empty などを使えるようにする（必須）
     end
 
-    params :token do
+    params do
       requires :token, type: String, desc: "Access token"
     end
     resource :my do
