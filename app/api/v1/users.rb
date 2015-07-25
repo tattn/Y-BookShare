@@ -129,7 +129,7 @@ module V1
               desc "follow back"
               put '/', jbuilder: 'empty' do
                 authenticate!
-                if friend = Friend.find_by(user_id: params[:friend_id], friend_id: @current_user.user_id)
+								if friend = Friend.find_by(user_id: params[:friend_id], friend_id: @current_user.user_id, accepted: false)
                   friend.update accepted: true
                   Friend.create user_id: @current_user.user_id, friend_id: params[:friend_id], accepted: true
                 end
