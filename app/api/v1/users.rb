@@ -161,7 +161,7 @@ module V1
           post '/', jbuilder: 'empty' do
             authenticate!
 
-            emit_error! "すでに借りている本を借りようとしています", 400, 1 if Borrow.find_by user_id: @current_user.user_id, book_id: params[:book_id]
+            emit_error! "すでに借りている本を借りようとしています", 400, 1 if Borrow.find_by user_id: params[:user_id], book_id: params[:book_id]#@current_user.user_id, book_id: params[:book_id]
 
             @borrow_book = Bookshelf.find_by user_id: params[:lender_id], book_id: params[:book_id]
             emit_error! "存在しない本を借りようとしています", 400, 1 unless @borrow_book
@@ -175,24 +175,6 @@ module V1
               @borrow_book.update borrower_id: @current_user.user_id
             else
               emit_error! "すでに借りられている本を借りようとしています", 400, 1
-            end
-          end
-
-          params do
-            requires :book_id, type: Integer, desc: "book id"
-          end
-          route_param :book_id do
-            delete '/', jbuilder: 'empty' do
-              authenticate!
-
-              @borrow_book = Borrow.find_by user_id: @current_user.user_id, book_id: params[:book_id]
-              emit_error! "存在しない本の削除", 400, 1 unless @borrow_book
-
-              @borrow_bookshelf = Bookshelf.find_by borrower_id: @current_user.user_id, book_id: params[:book_id]
-              emit_error! "存在しない本棚の本の返却", 400, 1 unless @borrow_book
-
-              @borrow_book.delete
-              @borrow_bookshelf.update borrower_id: 0
             end
           end
         end
