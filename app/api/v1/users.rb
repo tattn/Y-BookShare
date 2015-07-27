@@ -161,7 +161,7 @@ module V1
           post '/', jbuilder: 'empty' do
             authenticate!
 
-            emit_error! "すでに借りている本を借りようとしています", 400, 1 if Borrow.find_by user_id: params[:user_id], book_id: params[:book_id]#@current_user.user_id, book_id: params[:book_id]
+            emit_error! "すでに借りている本を借りようとしています", 400, 1 if Borrow.find_by user_id: @current_user.user_id, book_id: params[:book_id]
 
             @borrow_book = Bookshelf.find_by user_id: params[:lender_id], book_id: params[:book_id]
             emit_error! "存在しない本を借りようとしています", 400, 1 unless @borrow_book
