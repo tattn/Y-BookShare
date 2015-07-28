@@ -47,8 +47,8 @@ module V1
         title = params[:title] if params[:title]
         title = params[:isbn] if params[:isbn]
         if title
-          book = Book.where("title like ?", "%#{title}%")
-          @books << book if book.present?
+          book = Book.where("title like ?", "%#{title}%").to_a
+          @books += book
 
           # データベースにない、またはパラメータによって指定されていれば、アマゾンで検索して結果を保存
           if book.blank? or params[:amazon]
