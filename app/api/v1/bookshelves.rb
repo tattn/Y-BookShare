@@ -21,10 +21,6 @@ module V1
 
     resource :bookshelves do
 
-	  get :test do
-		Bookshelf.all
-	  end
-
       params do
         requires :user_id, type: Integer, desc: "UserID"
       end
