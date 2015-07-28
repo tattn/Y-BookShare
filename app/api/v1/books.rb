@@ -47,16 +47,18 @@ module V1
         title = params[:title] if params[:title]
         title = params[:isbn] if params[:isbn]
         if title
-          book = Book.where("title like '%" + title + "%'")
-          @books << book if book
+          book = Book.where("title like ?", "%#{title}%")
+          @books << book if book.present?
 
           # データベースにない、またはパラメータによって指定されていれば、アマゾンで検索して結果を保存
-          if !book or params[:amazon]
+          if book.blank? or params[:amazon]
             Foreign.search_book title do |item|
               if item[:isbn]
                 book = Book.find_or_initialize_by isbn: item[:isbn]
+								puts "isbn"
               else
                 book = Book.find_or_initialize_by title: item[:title]
+								puts "title"
               end
               book.update item
               @books << book

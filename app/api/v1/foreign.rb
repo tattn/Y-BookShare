@@ -22,6 +22,13 @@ module V1
       res.items.each do |item|
         element = item.get_element('ItemAttributes')
 
+				img_url = item.get_hash("MediumImage");
+				if img_url
+					img_url = img_url["URL"]
+				else
+					img_url = ""
+				end
+
         data = {
           # :asin => item.get('ASIN'), #B00BKY0SK2
           title: element.get_unescaped("Title"), #のんのんびより 2&lt;のんのんびより&gt; (コミックアライブ)
@@ -35,7 +42,7 @@ module V1
           # :small_image => item.get_hash("SmallImage"),#{"URL"=>"http://ecx.images-amazon.com/images/I/51-urJOxFzL._SL75_.jpg", "Height"=>"75", "Width"=>"53"}
           # :medium_image => item.get_hash("MediumImage"),
           # :large_image => item.get_hash("LargeImage")
-          cover_image_url: item.get_hash("MediumImage")["URL"],
+          cover_image_url: img_url,
         }
 
         yield data
