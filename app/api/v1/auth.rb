@@ -15,7 +15,7 @@ module V1
 				@user = User.where(email: params[:email]).first
 
 				if @user && @user.authenticate(params[:password])
-					key = ApiKey.create(user_id: user.id)
+					key = ApiKey.create(user_id: @user.id)
 					@token = key.access_token
 				else
 					emit_error! 'メールアドレスまたはパスワードが間違っています', 401, 1
