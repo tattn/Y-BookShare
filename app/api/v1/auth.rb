@@ -11,14 +11,14 @@ module V1
 				requires :email, type: String, desc: "Email"
 				requires :password, type: String, desc: "Password"
 			end
-			post :login do
-				user = User.where(email: params[:email]).first
+			post :login, jbuilder: 'auth' do
+				@user = User.where(email: params[:email]).first
 
-				if user && user.authenticate(params[:password])
-					key = ApiKey.create(user_id: user.id)
-					{ token: key.access_token, userId: user.id }
+				if @user && @user.authenticate(params[:password])
+					key = ApiKey.create(user_id: @user.id)
+					@token = key.access_token
 				else
-					emit_error 'Unauthorized', 401, 1
+					emit_error! 'メールアドレスまたはパスワードが間違っています', 401, 1
 				end
 			end
 
