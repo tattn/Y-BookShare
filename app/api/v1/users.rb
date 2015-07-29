@@ -82,7 +82,7 @@ module V1
           desc "get the friends list"
           get '/', jbuilder: 'users/users' do
             authenticate!
-            friend = Friend.where(user_id: @current_user.user_id, accepted: true).map(&:friend_id)
+            friend = Friend.where(user_id: @current_user.user_id, accepted: true).map(&:friend_id) - Blacklist.where(user_id: @current_user.user_id).map(&:bother_id)
             @users =  User.where(user_id: friend)
           end
 
@@ -179,6 +179,48 @@ module V1
           end
         end
 
+        resource :request do
+          get '/' , jbuilder: 'books/books' do
+            authenticate!
+            request_book_id = Request.where(user_id: params[:user_id]).map(&:book_id)
+            @books = Book.where(id: request_book_id)
+          end
+
+          params do
+            requires :book_id, type: Integer, desc: "book id"
+          end
+          post '/', jbuilder: 'empty' do
+            authenticate!
+            if Request.find_by book_id: params[:book_id], user_id: params[:user_id], sender_id: @current_user.user_id
+              emit_error "すでにリクエストされている本", 400, 1 # エラーを吐く場合はこのメソッドを使う(参照: api/v1/root.rb)
+            else
+              # status 201
+              Request.create book_id: params[:book_id], user_id: params[:user_id], sender_id: @current_user.user_id
+            end
+          end
+
+          params do
+            requires :book_id, type: Integer, desc: "book id"
+          end
+          route_param :book_id do
+            params do
+              optional :accepted, type: Boolean, desc: "did accept request or not"
+            end
+            put '/', jbuilder: 'empty' do
+              authenticate!
+              request = Request.find_by book_id: params[:book_id], user_id: params[:user_id], sender_id: @current_user.user_id
+              return unless request
+              request.update accepted: params[:accepted]
+            end
+
+            delete '/', jbuilder: 'empty' do
+              authenticate!
+              request = Request.find_by book_id: params[:book_id], user_id: params[:user_id], sender_id: @current_user.user_id
+              return unless request
+              request.destroy
+            end
+          end
+        end
       end
     end
   end
