@@ -44,3 +44,44 @@ FactoryGirl.create_list(:request,3)
 #	invitation_code: 'admin'
 #)
 
+
+# フロントエンド開発用ユーザー
+User.create!(
+	user_id: 1000,
+	email: 'admin@admin.jp',
+	firstname: '達也',
+	lastname: '田中',
+	school: '青山学院大学',
+	lend_num: 5,
+	borrow_num: 3,
+	password: 'admin',
+	invitation_code: 'admin'
+)
+
+4.times do |n|
+	Friend.create!(
+		user_id: 1000,
+		friend_id: n,
+		accepted: true,
+	)
+	Friend.create!(
+		user_id: n,
+		friend_id: 1000,
+		accepted: true,
+	)
+end
+
+require_relative '../app/api/v1/foreign'
+
+V1::Foreign.search_book 'デスノート' do |item|
+	book = Book.find_or_initialize_by isbn: item[:isbn]
+	book.update item
+
+	Bookshelf.create!(
+		user_id: 1000,
+		book_id: book.id,
+		borrower_id: 0,
+		rate: 3,
+		comment: 'おすすめ〜'
+	)
+end
