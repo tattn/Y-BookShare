@@ -15,7 +15,7 @@ module V1
 
       # Strong parameter, but the following method is not secure.
       def user_params
-        ActionController::Parameters.new(params).permit :user_id, :email, :password, :firstname, :lastname, :school, :lend_num, :borrow_num, :invitation_code
+        ActionController::Parameters.new(params).permit :user_id, :email, :password, :firstname, :lastname, :school, :lend_num, :borrow_num, :comment, :invitation_code
       end
 
       params :token do
@@ -61,6 +61,7 @@ module V1
           optional :school, type: String, desc: "school of the user"
           optional :lend_num, type: Integer, desc: "The number that the user has lent a book"
           optional :borrow_num, type: Integer, desc: "The number that the user has borrowed a book"
+          optional :comment, type: String, desc: "comment"
           optional :invitation_code, type: String, desc: "invitation code"
         end
         put '/', jbuilder: 'empty' do

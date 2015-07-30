@@ -8,6 +8,7 @@ class CreateUsers < ActiveRecord::Migration
       t.string :school
       t.integer :lend_num
       t.integer :borrow_num
+      t.string :comment
       t.string :invitation_code, :null => false
 	    t.string :password_digest
 
