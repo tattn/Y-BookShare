@@ -41,18 +41,28 @@ module V1
         optional :title, type: String, desc: "Title of the book."
         optional :isbn, type: Integer, desc: "ISBN of the book."
         optional :amazon, type: Integer, desc: "search in amazon if this parameter exists"
+        optional :start, type: Integer, default: 1, desc: "position of all results"
       end
       get '/search', jbuilder: 'books/books' do        # jbuilderで出力する場合はこのように書く(参照: views/api)
         @books = []
         title = params[:title] if params[:title]
         title = params[:isbn] if params[:isbn]
         if title
-          book = Book.where("title like ?", "%#{title}%").to_a
-          @books += book
+					RESULT_MAX = 10         # 取得件数
+					start = params[:start]  # 取得開始位置
+
+					books = Book.where("title like ?", "%#{title}%")
+					book_count = books.count
+
+					if book_count > RESULT_MAX * (start - 1)
+						book = books.offset(10 * start).to_a
+						@books += book
+					end
 
           # データベースにない、またはパラメータによって指定されていれば、アマゾンで検索して結果を保存
-          if book.blank? or params[:amazon]
-            Foreign.search_book title do |item|
+          if @books.blank? or params[:amazon]
+						#FIXME: アマゾンで検索した結果、データベースに既にあるものを取得してしまい、同じ本を返してしまう可能性がある
+            Foreign.search_book title, start do |item|
               if item[:isbn]
                 book = Book.find_or_initialize_by isbn: item[:isbn]
 								puts "isbn"
