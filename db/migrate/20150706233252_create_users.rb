@@ -5,10 +5,10 @@ class CreateUsers < ActiveRecord::Migration
       t.string :email, :null => false
       t.string :firstname, :null => false
       t.string :lastname, :null => false
-      t.string :school
+      t.string :school, :defaut => ''
       t.integer :lend_num
       t.integer :borrow_num
-			t.string :comment
+			t.string :comment, :default => ''
       t.string :invitation_code, :null => false
 	    t.string :password_digest
 
