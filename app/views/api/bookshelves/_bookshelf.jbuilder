@@ -1,3 +1,4 @@
+json.userId bookshelf.user_id
 json.borrowerId bookshelf.borrower_id
 json.rate bookshelf.rate
 json.book do
