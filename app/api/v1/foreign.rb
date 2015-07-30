@@ -8,7 +8,7 @@ Amazon::Ecs.options = {
 
 module V1
   module Foreign extend self
-    def search_book title
+    def search_book title, start=1
       return unless block_given?
 
       # refer: http://www.ajaxtower.jp/ecs/
@@ -17,12 +17,12 @@ module V1
         response_group: 'Medium',
         country:        'jp',
         power:          'binding:not kindle', # Kindle 除外
-        item_page:      1,
+        item_page:      start, # 1-10まで?
       )
       res.items.each do |item|
         element = item.get_element('ItemAttributes')
 
-				img_url = item.get_hash("MediumImage");
+				img_url = item.get_hash("LargeImage");
 				if img_url
 					img_url = img_url["URL"]
 				else
