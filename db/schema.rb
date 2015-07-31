@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150713140703) do
+ActiveRecord::Schema.define(version: 20150731140547) do
 
   create_table "api_keys", force: :cascade do |t|
     t.string   "access_token"
@@ -40,6 +40,7 @@ ActiveRecord::Schema.define(version: 20150713140703) do
     t.string   "cover_image_url"
     t.datetime "created_at",                null: false
     t.datetime "updated_at",                null: false
+    t.integer  "salesrank"
   end
 
   create_table "bookshelves", force: :cascade do |t|

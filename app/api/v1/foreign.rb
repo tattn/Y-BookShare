@@ -43,6 +43,7 @@ module V1
           # :medium_image => item.get_hash("MediumImage"),
           # :large_image => item.get_hash("LargeImage")
           cover_image_url: img_url,
+					sales_rank: item.get("SalesRank"),
         }
 
         yield data
