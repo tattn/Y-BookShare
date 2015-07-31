@@ -1,0 +1,46 @@
+<h1>ちょー偉い人用のページ</h1>
+<h1>ユーザー一覧</h1>
+<table border="1">
+  <tr>
+    <th>user_id</th>
+    <th>名前</th>
+    <th>招待コード</th>
+    <th>アクセストークン</th>
+  </tr>
+<% User.all.each do |user| %>
+  <tr>
+    <td><%= user.user_id %></td>
+    <td><%= user.lastname + ' ' + user.firstname %></td>
+    <td><%= user.invitation_code %></td>
+    <td id="token<%= user.user_id %>"><%= ApiKey.where(user_id: user.user_id).first.access_token if ApiKey.where(user_id: user.user_id).first %></td>
+  </tr>
+<% end  %>
+</table>
+
+<h1>友達申請フォーム</h1>
+<p>あいてのアクセストークンが設定されてる場合のみ申請できます</p>
+<div>自分(申請先)のuser_id：<input id='user_id' type="text"></div>
+<div>相手(申請元)のuser_id：<input id='sender_id' type="text"></div>
+<input id='friendrequest' type="button" value="申請" />
+
+<script>
+$("#friendrequest").click(function() {
+  var url = 'http://160.16.70.40/bookshare/api/v1/users/' + $("#sender_id").val() + '/friend';
+  $('<form action="' + url + '" method="POST">' +
+      '<input type="hidden" name="token" value="' + $("#token" + $("#user_id")).val() + '">' +
+      '<input type="hidden" name="friend_id" value="' + $("#user_id").val() + '">' +
+    '</form>').submit();
+  alert('送信しました');
+});
+
+/*
+$("#friendrequest").on('click', function() {
+  $.post("http://160.16.70.40/bookshare/api/v1/auth/login", { email: $("#email").val(), password: $("#pass").val()}, function(data) {
+    alert(data);
+  });
+
+
+  var url = "../api/v1/users/" + $("#sender_id").val() + "/friend";
+});
+*/
+</script>
