@@ -44,6 +44,7 @@ module V1
           # :large_image => item.get_hash("LargeImage")
           cover_image_url: img_url,
 					salesrank: item.get("SalesRank"),
+					amazon_url: item.get("DetailPageURL"),
         }
 
         yield data
