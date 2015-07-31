@@ -6,4 +6,5 @@ json.manufacturer book.manufacturer
 json.genreId book.genre_id
 json.coverImageUrl book.cover_image_url
 json.salesrank book.salesrank
+json.publicationDate book.publication_date
 json.amazonUrl book.amazon_url
