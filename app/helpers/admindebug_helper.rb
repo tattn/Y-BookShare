@@ -1,0 +1,2 @@
+module AdmindebugHelper
+end
