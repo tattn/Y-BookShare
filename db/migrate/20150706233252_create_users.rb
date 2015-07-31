@@ -6,8 +6,8 @@ class CreateUsers < ActiveRecord::Migration
       t.string :firstname, :null => false
       t.string :lastname, :null => false
       t.string :school, :defaut => ''
-      t.integer :lend_num
-      t.integer :borrow_num
+      t.integer :lend_num, :default => 0
+      t.integer :borrow_num, :default => 0
 			t.string :comment, :default => ''
       t.string :invitation_code, :null => false
 	    t.string :password_digest
