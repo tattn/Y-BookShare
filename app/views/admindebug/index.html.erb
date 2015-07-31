@@ -23,11 +23,12 @@
 <div>相手(申請元)のuser_id：<input id='sender_id' type="text"></div>
 <input id='friendrequest' type="button" value="申請" />
 
+<script src='https://code.jquery.com/jquery-2.1.4.min.js'></script>
 <script>
 $("#friendrequest").click(function() {
   var url = 'http://160.16.70.40/bookshare/api/v1/users/' + $("#sender_id").val() + '/friend';
   $('<form action="' + url + '" method="POST">' +
-      '<input type="hidden" name="token" value="' + $("#token" + $("#user_id")).val() + '">' +
+      '<input type="hidden" name="token" value="' + $("#token" + $("#sender_id").val()).text() + '">' +
       '<input type="hidden" name="friend_id" value="' + $("#user_id").val() + '">' +
     '</form>').submit();
   alert('送信しました');

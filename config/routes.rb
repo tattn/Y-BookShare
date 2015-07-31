@@ -1,7 +1,7 @@
 Rails.application.routes.draw do
 	mount API => '/bookshare/'
 
-  get 'admindebug' => 'admindebug#index'
+  get '/bookshare/admindebug' => 'admindebug#index'
 
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".
