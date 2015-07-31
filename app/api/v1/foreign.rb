@@ -34,7 +34,7 @@ module V1
 
 				if release_date and publication_date # nil がありうる
 					publication_date = release_date if release_date < publication_date
-				elsif publication_date
+				elsif not publication_date
 					publication_date = release_date
 				end
 
@@ -45,8 +45,8 @@ module V1
           isbn: element.get("ISBN"), #4040672828  ProductGroupがeBooks のときはnil
           author: element.get_array("Author").join(", "), #あっと
           # :product_group => element.get("ProductGroup"), #eBooks
+					publisher: element.get("Publisher"),
           manufacturer: element.get("Manufacturer"), #KADOKAWA / メディアファクトリー
-          # :publication_date => element.get("PublicationDate"),
 
           # :small_image => item.get_hash("SmallImage"),#{"URL"=>"http://ecx.images-amazon.com/images/I/51-urJOxFzL._SL75_.jpg", "Height"=>"75", "Width"=>"53"}
           # :medium_image => item.get_hash("MediumImage"),

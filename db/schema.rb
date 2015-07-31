@@ -32,15 +32,15 @@ ActiveRecord::Schema.define(version: 20150731140547) do
   end
 
   create_table "books", force: :cascade do |t|
-    t.string   "title",                     null: false
+    t.string   "title",                                  null: false
     t.integer  "isbn",            limit: 8
     t.string   "author"
     t.string   "manufacturer"
     t.integer  "genre_id"
     t.string   "cover_image_url"
-    t.datetime "created_at",                null: false
-    t.datetime "updated_at",                null: false
-    t.integer  "salesrank"
+    t.datetime "created_at",                             null: false
+    t.datetime "updated_at",                             null: false
+    t.integer  "salesrank",                 default: -1
   end
 
   create_table "bookshelves", force: :cascade do |t|
@@ -93,18 +93,18 @@ ActiveRecord::Schema.define(version: 20150731140547) do
   end
 
   create_table "users", force: :cascade do |t|
-    t.integer  "user_id",                      null: false
-    t.string   "email",                        null: false
-    t.string   "firstname",                    null: false
-    t.string   "lastname",                     null: false
+    t.integer  "user_id",         null: false
+    t.string   "email",           null: false
+    t.string   "firstname",       null: false
+    t.string   "lastname",        null: false
     t.string   "school"
     t.integer  "lend_num"
     t.integer  "borrow_num"
-    t.string   "comment",         default: ""
-    t.string   "invitation_code",              null: false
+    t.string   "comment"
+    t.string   "invitation_code", null: false
     t.string   "password_digest"
-    t.datetime "created_at",                   null: false
-    t.datetime "updated_at",                   null: false
+    t.datetime "created_at",      null: false
+    t.datetime "updated_at",      null: false
   end
 
   add_index "users", ["user_id"], name: "index_users_on_user_id", unique: true

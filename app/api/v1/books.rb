@@ -48,13 +48,13 @@ module V1
         title = params[:title] if params[:title]
         title = params[:isbn] if params[:isbn]
         if title
-					RESULT_MAX = 10         # 取得件数
+					result_max = 10         # 取得件数
 					start = params[:start]  # 取得開始位置
 
 					books = Book.where("title like ?", "%#{title}%")
 					book_count = books.count
 
-					if book_count > RESULT_MAX * (start - 1)
+					if book_count > result_max * (start - 1)
 						book = books.offset(10 * start).to_a
 						@books += book
 					end
@@ -65,10 +65,8 @@ module V1
             Foreign.search_book title, start do |item|
               if item[:isbn]
                 book = Book.find_or_initialize_by isbn: item[:isbn]
-								puts "isbn"
               else
                 book = Book.find_or_initialize_by title: item[:title]
-								puts "title"
               end
               book.update item
               @books << book
