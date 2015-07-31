@@ -92,17 +92,18 @@ ActiveRecord::Schema.define(version: 20150713140703) do
   end
 
   create_table "users", force: :cascade do |t|
-    t.integer  "user_id",         null: false
-    t.string   "email",           null: false
-    t.string   "firstname",       null: false
-    t.string   "lastname",        null: false
+    t.integer  "user_id",                      null: false
+    t.string   "email",                        null: false
+    t.string   "firstname",                    null: false
+    t.string   "lastname",                     null: false
     t.string   "school"
     t.integer  "lend_num"
     t.integer  "borrow_num"
-    t.string   "invitation_code", null: false
+    t.string   "comment",         default: ""
+    t.string   "invitation_code",              null: false
     t.string   "password_digest"
-    t.datetime "created_at",      null: false
-    t.datetime "updated_at",      null: false
+    t.datetime "created_at",                   null: false
+    t.datetime "updated_at",                   null: false
   end
 
   add_index "users", ["user_id"], name: "index_users_on_user_id", unique: true

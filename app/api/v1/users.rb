@@ -181,10 +181,9 @@ module V1
         end
 
         resource :request do
-          get '/' , jbuilder: 'books/books' do
+          get '/' , jbuilder: 'requests/requests' do
             authenticate!
-            request_book_id = Request.where(user_id: params[:user_id]).map(&:book_id)
-            @books = Book.where(id: request_book_id)
+            @reqs = Request.where(user_id: params[:user_id])
           end
 
           params do
