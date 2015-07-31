@@ -29,6 +29,15 @@ module V1
 					img_url = ""
 				end
 
+				release_date = element.get("ReleaseDate")
+				publication_date = element.get("PublicationDate")
+
+				if release_date and publication_date # nil がありうる
+					publication_date = release_date if release_date < publication_date
+				elsif publication_date
+					publication_date = release_date
+				end
+
         data = {
           # :asin => item.get('ASIN'), #B00BKY0SK2
           title: element.get_unescaped("Title"), #のんのんびより 2&lt;のんのんびより&gt; (コミックアライブ)
@@ -44,7 +53,7 @@ module V1
           # :large_image => item.get_hash("LargeImage")
           cover_image_url: img_url,
 					salesrank: item.get("SalesRank"),
-					publication_date: element.get("ReleaseDate"), #PublicationDate
+					publication_date: publication_date,
 					amazon_url: item.get("DetailPageURL"),
         }
 
