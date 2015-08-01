@@ -10,7 +10,7 @@ module V1
     end
     resource :my do
       resource :request do
-        get '/sent', jbuilder: 'requests/requests' do
+        get '/sent', jbuilder: 'requests/requests2' do
           authenticate!
           @reqs = Request.where(sender_id: @current_user.user_id)
         end
