@@ -43,6 +43,7 @@ module V1
     mount V1::Bookshelves
     mount V1::Blacklists
     mount V1::Lend
+    mount V1::Requests
   end
 end
 
