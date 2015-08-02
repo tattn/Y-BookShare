@@ -11,8 +11,6 @@ class CreateUsers < ActiveRecord::Migration
       t.string :comment, :default => ''
       t.string :invitation_code, :null => false
       t.string :password_digest
-      t.string :icon_name
-      t.binary :icon_data, :limit => 10.megabytes
 
       t.timestamps null: false
     end
