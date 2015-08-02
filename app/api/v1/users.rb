@@ -225,7 +225,7 @@ module V1
         resource :icon do
           desc "Return icon."
           get '/' do
-						user = User.find_by user_id params[:user_id]
+						user = User.find_by user_id: params[:user_id]
 						emit_error! "存在しないユーザーです", 400, 1 unless user
             content_type "application/octet-stream"
             header['Content-Disposition'] = "attachment; filename=" + user.icon_name
