@@ -15,8 +15,9 @@ module V1
           @timelines = []
           friends = Friend.where user_id: @current_user.user_id
           friends.each do |friend|
-            @timelines << Timeline.where(user_id: friend.friend_id).to_a
+            @timelines += Timeline.where(user_id: friend.friend_id).to_a
           end
+          p @timelines
           @timelines.sort! {|a, b| a.created_at <=> b.created_at}
         end
       end

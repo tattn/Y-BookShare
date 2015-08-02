@@ -35,7 +35,7 @@ module V1
     end
 
 		def add_timeline user_id, type, data
-			timeline = Timeline.create user_id: user_id, type: type, data: data
+			Timeline.create user_id: user_id, type: type, data: data
 		end
   end
 
