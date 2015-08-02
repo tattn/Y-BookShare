@@ -226,11 +226,13 @@ module V1
           desc "Return icon."
           get '/' do
             authenticate!
+						user = User.find_by user_id params[:user_id]
+						emit_error! "存在しないユーザーです", 400, 1 unless user
             content_type "application/octet-stream"
-            header['Content-Disposition'] = "attachment; filename=" + @current_user.icon_name
+            header['Content-Disposition'] = "attachment; filename=" + user.icon_name
             env['api.format'] = :binary
 
-            @current_user.icon_data
+            user.icon_data
           end
 
           desc "upload icon"
