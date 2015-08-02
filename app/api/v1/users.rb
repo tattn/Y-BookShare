@@ -221,6 +221,30 @@ module V1
             end
           end
         end
+
+        resource :icon do
+          desc "Return icon."
+          get '/' do
+            authenticate!
+            content_type "application/octet-stream"
+            header['Content-Disposition'] = "attachment; filename=" + @current_user.icon_name
+            env['api.format'] = :binary
+
+            @current_user.icon_data
+          end
+
+          desc "upload icon"
+          params do
+            requires :upload_file, type: Hash, desc: "upload icon file."
+          end
+          post '/', jbuilder: 'empty' do
+            authenticate!
+            icon_name = params[:upload_file][:filename]
+            icon_data = params[:upload_file][:tempfile]
+
+            @current_user.update icon_name: icon_name, icon_data: icon_data.read
+          end
+        end
       end
     end
   end
