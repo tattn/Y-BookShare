@@ -17,6 +17,7 @@ module V1
         response_group: 'Medium',
         country:        'jp',
         power:          'binding:not kindle', # Kindle 除外
+				sort:           'salesrank',
         item_page:      start, # 1-10まで?
       )
       res.items.each do |item|

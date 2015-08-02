@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150731140547) do
+ActiveRecord::Schema.define(version: 20150802142732) do
 
   create_table "api_keys", force: :cascade do |t|
     t.string   "access_token"
@@ -32,15 +32,18 @@ ActiveRecord::Schema.define(version: 20150731140547) do
   end
 
   create_table "books", force: :cascade do |t|
-    t.string   "title",                                  null: false
-    t.integer  "isbn",            limit: 8
+    t.string   "title",                                   null: false
+    t.integer  "isbn",             limit: 8
     t.string   "author"
     t.string   "manufacturer"
     t.integer  "genre_id"
     t.string   "cover_image_url"
-    t.datetime "created_at",                             null: false
-    t.datetime "updated_at",                             null: false
-    t.integer  "salesrank",                 default: -1
+    t.datetime "created_at",                              null: false
+    t.datetime "updated_at",                              null: false
+    t.integer  "salesrank"
+    t.string   "amazon_url",                 default: ""
+    t.date     "publication_date"
+    t.string   "publisher",                  default: ""
   end
 
   create_table "bookshelves", force: :cascade do |t|
@@ -93,18 +96,20 @@ ActiveRecord::Schema.define(version: 20150731140547) do
   end
 
   create_table "users", force: :cascade do |t|
-    t.integer  "user_id",         null: false
-    t.string   "email",           null: false
-    t.string   "firstname",       null: false
-    t.string   "lastname",        null: false
+    t.integer  "user_id",                      null: false
+    t.string   "email",                        null: false
+    t.string   "firstname",                    null: false
+    t.string   "lastname",                     null: false
     t.string   "school"
     t.integer  "lend_num"
     t.integer  "borrow_num"
-    t.string   "comment"
-    t.string   "invitation_code", null: false
+    t.string   "comment",         default: ""
+    t.string   "invitation_code",              null: false
     t.string   "password_digest"
-    t.datetime "created_at",      null: false
-    t.datetime "updated_at",      null: false
+    t.datetime "created_at",                   null: false
+    t.datetime "updated_at",                   null: false
+    t.string   "icon_name",       default: ""
+    t.binary   "icon_data"
   end
 
   add_index "users", ["user_id"], name: "index_users_on_user_id", unique: true
