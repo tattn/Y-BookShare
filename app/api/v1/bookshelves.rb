@@ -38,9 +38,10 @@ module V1
         end
         post '/' , jbuilder: 'empty' do
           if Bookshelf.find_by user_id: params[:user_id], book_id: params[:book_id]
-            emit_empty "すでに登録されているタイトル", 400, 1
+            emit_error! "すでに登録されているタイトル", 400, 1
           else
-            Bookshelf.create user_id: params[:user_id], book_id: params[:book_id], borrower_id: 0
+            bookshelf = Bookshelf.create user_id: params[:user_id], book_id: params[:book_id], borrower_id: 0
+						add_timeline params[:user_id], "bookshelf", { bookshelf: bookshelf }
           end
         end
 

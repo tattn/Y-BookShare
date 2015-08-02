@@ -37,5 +37,9 @@ module BookShare
 		config.middleware.use(Rack::Config) do |env|
 			env['api.tilt.root'] = Rails.root.join 'app', 'views', 'api'
 		end
+
+		config.generators do |g|
+			g.orm :active_record
+		end
   end
 end

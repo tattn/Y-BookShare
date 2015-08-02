@@ -33,6 +33,10 @@ module V1
         false
       end
     end
+
+		def add_timeline user_id, type, data
+			timeline = Timeline.create user_id: user_id, type: type, data: data
+		end
   end
 
   class Root < Grape::API
@@ -44,6 +48,7 @@ module V1
     mount V1::Blacklists
     mount V1::Lend
     mount V1::Requests
+		mount V1::Timelines
   end
 end
 
