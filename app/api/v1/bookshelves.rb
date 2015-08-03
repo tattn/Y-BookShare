@@ -42,10 +42,12 @@ module V1
           else
             bookshelf = Bookshelf.create user_id: params[:user_id], book_id: params[:book_id], borrower_id: 0
 						data = { bookshelf: bookshelf.attributes }
-						data[:book_id] = Book.find_by id: bookshelf.book_id
-						data[:user_id] = User.find_by user_id: bookshelf.user_id
-						data.delete "updated_at"
-						data.delete "created_at"
+						data[:bookshelf][:book] = Book.find_by id: bookshelf.book_id
+						data[:bookshelf][:user] = User.find_by user_id: bookshelf.user_id
+						data[:bookshelf].delete "updated_at"
+						data[:bookshelf].delete "created_at"
+						data[:bookshelf].delete "book_id"
+						data[:bookshelf].delete "user_id"
 						add_timeline params[:user_id], "bookshelf", data
           end
         end
