@@ -43,8 +43,8 @@ module V1
               friend = Friend.arel_table
               bookshelf = Bookshelf.arel_table
 
-              bookshelves = friend.project(Arel.star).join(bookshelf).on(friend.friend_id.eq(bookshelf[:user_id]))
-                                  .where(bookshelf.book_id.eq(id_by_title))
+              bookshelves = friend.project(Arel.star).join(bookshelf).on(friend[:friend_id].eq(bookshelf[:user_id]))
+                                  .where(bookshelf[:book_id].eq(id_by_title))
               book_count = bookshelves.count
               if book_count > result_max * (start - 1)
                 @bookshelves = bookshelves.offset(10 * start)
