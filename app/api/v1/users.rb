@@ -38,7 +38,10 @@ module V1
         else
           new_id = User.maximum(:user_id) + 1
           params[:user_id] = new_id
-          params[:invitation_code] = SecureRandom.hex #TODO: 重複チェック
+					code = SecureRandom.hex
+					begin
+						params[:invitation_code] = code
+					end while User.find_by(invitation_code: code)
           @user = User.create user_params
         end
       end
@@ -89,12 +92,14 @@ module V1
 
           desc "Add a new friend."
           params do
-            requires :friend_id, type: Integer, desc: "friend id"
+						requires :invitation_code, type: Integer, desc: "friend's invitation code"
           end
           post '/', jbuilder: 'empty' do
             authenticate!
-            emit_error! "すでに登録されている友達", 400, 1 if Friend.find_by user_id: @current_user.user_id, friend_id: params[:friend_id]
-            Friend.create user_id: @current_user.user_id, friend_id: params[:friend_id], accepted: false
+						user = User.find_by invitation_code: params[:invitation_code]
+						emit_error! "招待コードが間違っています", 400, 1 unless user
+            emit_error! "すでに登録されている友達", 400, 1 if Friend.find_by user_id: @current_user.user_id, friend_id: user.user_id
+            Friend.create user_id: @current_user.user_id, friend_id: user.user_id, accepted: false
           end
 
           params do
