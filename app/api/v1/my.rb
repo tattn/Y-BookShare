@@ -37,9 +37,8 @@ module V1
             if params[:title]
               bookshelves = []
               id_by_title = Book.where("title like '%" + params[:title] + "%'").map(&:id)
-              Friend.where(user_id: @current_user.user_id).each do |friend|
-                bookshelves << Bookshelf.where(user_id: friend.friend_id, book_id: id_by_title).to_a
-              end
+              friends = Friend.where(user_id: @current_user.user_id).map(&:friend_id)
+              bookshelves = Bookshelf.where user_id:friends, book_id:id_by_title
               book_count = bookshelves.count
               if book_count > result_max * (start - 1)
                 @bookshelves = bookshelves.offset(10 * start)
