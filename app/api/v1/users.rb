@@ -92,7 +92,7 @@ module V1
 
           desc "Add a new friend."
           params do
-						requires :invitation_code, type: Integer, desc: "friend's invitation code"
+						requires :invitation_code, type: String, desc: "friend's invitation code"
           end
           post '/', jbuilder: 'empty' do
             authenticate!
