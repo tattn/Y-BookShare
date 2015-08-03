@@ -31,19 +31,18 @@ module V1
           end
           get '/search' , jbuilder: 'bookshelves/bookshelves' do
             authenticate!
-            @bookshelves = []
             result_max = 10         # 取得件数
             start = params[:start]  # 取得開始位置
 
             if params[:title]
+              bookshelves = []
               id_by_title = Book.where("title like '%" + params[:title] + "%'").map(&:id)
               Friend.where(user_id: @current_user.user_id).each do |user|
                 bookshelves << Bookshelf.where(user_id: params[:user_id], book_id: id_by_title)
               end
               book_count = bookshelves.count
               if book_count > result_max * (start - 1)
-                book = bookshelves.offset(10 * start).to_a
-                @bookshelves += book
+                @bookshelves = bookshelves.offset(10 * start)
               end
             end
           end
