@@ -79,18 +79,23 @@ module V1
 
         resource :search do
           params do
-            optional :book_id, type: Integer, desc: "bookID"
             optional :title, type: String, desc: "title of the book"
+						optional :start, type: Integer, default: 1, desc: "position of all results"
           end
           get '/' , jbuilder: 'bookshelves/bookshelves' do
-            if params[:book_id]
-              @bookshelves = Bookshelf.where( user_id: params[:user_id], book_id: params[:book_id])
-            else
-              if params[:title]  #sample:   http://localhost:3000/bookshare/api/v1/bookshelves/1/search?title=Book1
-                id_by_title = Book.where("title like '%" + params[:title] + "%'").map(&:id)
-                @bookshelves = Bookshelf.where(user_id: params[:user_id], book_id: id_by_title)
-              end
-            end
+						@bookshelf = []
+						result_max = 10         # 取得件数
+						start = params[:start]  # 取得開始位置
+
+						if params[:title]  #sample:   http://localhost:3000/bookshare/api/v1/bookshelves/1/search?title=Book1
+							id_by_title = Book.where("title like '%" + params[:title] + "%'").map(&:id)
+							bookshelves = Bookshelf.where(user_id: params[:user_id], book_id: id_by_title)
+							book_count = bookshelves.count
+							if book_count > result_max * (start - 1)
+								book = bookshelves.offset(10 * start).to_a
+								@bookshelf += book
+							end
+						end
           end
         end
 
