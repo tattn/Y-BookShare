@@ -48,6 +48,8 @@ module V1
 						data[:book].delete "created_at"
 						data[:user].delete "updated_at"
 						data[:user].delete "created_at"
+						data[:user].delete "icon_name"
+						data[:user].delete "icon_data"
 						data.delete "updated_at"
 						data.delete "created_at"
 						data.delete "book_id"
