@@ -37,15 +37,9 @@ module V1
             if params[:title]
               bookshelves = []
               id_by_title = Book.where("title like '%" + params[:title] + "%'").map(&:id)
-              # Friend.where(user_id: @current_user.user_id).each do |friend|
-              #   bookshelves << Bookshelf.where(user_id: friend.friend_id, book_id: id_by_title)
-              # end
-              friend = Friend.arel_table
-              bookshelf = Bookshelf.arel_table
-
-              condition = friend.project(Arel.star).join(bookshelf).on(friend[:friend_id].eq(bookshelf[:user_id]))
-                                  .where(bookshelf[:book_id].eq(id_by_title))
-              bookshelves = Bookshelf.where(condition).all
+              Friend.where(user_id: @current_user.user_id).each do |friend|
+                bookshelves << Bookshelf.where(user_id: friend.friend_id, book_id: id_by_title).to_a
+              end
               book_count = bookshelves.count
               if book_count > result_max * (start - 1)
                 @bookshelves = bookshelves.offset(10 * start)
