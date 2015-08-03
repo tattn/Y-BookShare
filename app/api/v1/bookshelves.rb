@@ -54,7 +54,6 @@ module V1
 						data[:book].delete :cover_image_url
 						data[:book].delete :publication_date
 						data[:book].delete :amazon_url
-						data.delete "book_id"
 						data[:user] = User.find_by(user_id: bookshelf.user_id).attributes
 						data[:user][:userId] = data[:user][:user_id]
 						data[:user][:imageUrl] = data[:user][:image_url]
@@ -66,7 +65,6 @@ module V1
 						data[:user].delete :lend_num
 						data[:user].delete :borrow_num
 						data[:user].delete :book_num
-						data.delete "user_id"
 						data[:book].delete "updated_at"
 						data[:book].delete "created_at"
 						data[:user].delete "updated_at"
