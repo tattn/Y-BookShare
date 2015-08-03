@@ -36,7 +36,7 @@ module V1
 
 		def add_timeline user_id, type, data
 			if Timeline.all.count >= 20 # 20件を超えたら古いものを削除する
-				Timeline.sort_by({ |e| e.created_at }).first.destroy
+				Timeline.all.sort_by{|e| e.created_at }.first.destroy
 			end
 			Timeline.create user_id: user_id, type: type, data: data
 		end
