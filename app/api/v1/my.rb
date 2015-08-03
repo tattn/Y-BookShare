@@ -41,7 +41,7 @@ module V1
               bookshelves = Bookshelf.where user_id:friends, book_id:id_by_title
               book_count = bookshelves.count
               if book_count > result_max * (start - 1)
-                @bookshelves = bookshelves.offset(10 * start)
+                @bookshelves = bookshelves.offset(result_max * start).limit(result_max)
               end
             end
           end
