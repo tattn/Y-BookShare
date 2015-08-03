@@ -83,7 +83,7 @@ module V1
 						optional :start, type: Integer, default: 1, desc: "position of all results"
           end
           get '/' , jbuilder: 'bookshelves/bookshelves' do
-						@bookshelf = []
+						@bookshelves = []
 						result_max = 10         # 取得件数
 						start = params[:start]  # 取得開始位置
 
@@ -93,7 +93,7 @@ module V1
 							book_count = bookshelves.count
 							if book_count > result_max * (start - 1)
 								book = bookshelves.offset(10 * start).to_a
-								@bookshelf += book
+								@bookshelves += book
 							end
 						end
           end
