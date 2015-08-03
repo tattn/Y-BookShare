@@ -41,14 +41,18 @@ module V1
             emit_error! "すでに登録されているタイトル", 400, 1
           else
             bookshelf = Bookshelf.create user_id: params[:user_id], book_id: params[:book_id], borrower_id: 0
-						data = { bookshelf: bookshelf.attributes }
-						data[:bookshelf][:book] = Book.find_by id: bookshelf.book_id
-						data[:bookshelf][:user] = User.find_by user_id: bookshelf.user_id
-						data[:bookshelf].delete "updated_at"
-						data[:bookshelf].delete "created_at"
-						data[:bookshelf].delete "book_id"
-						data[:bookshelf].delete "user_id"
-						add_timeline params[:user_id], "bookshelf", data
+						data = bookshelf.attributes
+						data[:book] = Book.find_by(id: bookshelf.book_id).attributes
+						data[:user] = User.find_by(user_id: bookshelf.user_id).attributes
+						data[:book].delete "updated_at"
+						data[:book].delete "created_at"
+						data[:user].delete "updated_at"
+						data[:user].delete "created_at"
+						data.delete "updated_at"
+						data.delete "created_at"
+						data.delete "book_id"
+						data.delete "user_id"
+						add_timeline params[:user_id], "bookshelf", { bookshelf: data }
           end
         end
 
