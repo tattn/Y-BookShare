@@ -213,14 +213,14 @@ module V1
             end
             put '/', jbuilder: 'empty' do
               authenticate!
-              request = Request.find_by book_id: params[:book_id], user_id: params[:user_id], sender_id: @current_user.user_id
+              request = Request.find_by book_id: params[:book_id], user_id: params[:user_id]
               return unless request
               request.update accepted: params[:accepted]
             end
 
             delete '/', jbuilder: 'empty' do
               authenticate!
-              request = Request.find_by book_id: params[:book_id], user_id: params[:user_id], sender_id: @current_user.user_id
+              request = Request.find_by book_id: params[:book_id], user_id: params[:user_id]
               return unless request
               request.destroy
             end
