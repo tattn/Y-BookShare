@@ -53,6 +53,7 @@ module V1
     mount V1::Requests
 		mount V1::Timelines
 		mount V1::My
+		mount V1::Push
   end
 end
 
