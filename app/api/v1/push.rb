@@ -17,7 +17,6 @@ module V1
 
         PARSE_COM_APPLICATION_ID =  'n3giGyxTaQClMezovu0s6Zm2ZwtiVBD5TlLYOQKf'
         PARSE_COM_REST_API_KEY = 'WW8sO4UjrxAzSQuaeGaZGUCLEMGSTPzARwQvj550'
-        DEVISE_TOKEN = xxx # さっきのデバイス側のdevise token
 
         client = Parse.create application_id: PARSE_COM_APPLICATION_ID, api_key: PARSE_COM_REST_API_KEY, quiet: true
 
