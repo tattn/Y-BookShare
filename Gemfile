@@ -39,6 +39,7 @@ gem 'grape-jbuilder'
 gem 'amazon-ecs'
 gem 'mongoid', '~> 4.0.0'
 gem 'bson_ext'
+gem 'parse-ruby-client', git: 'https://github.com/adelevie/parse-ruby-client.git'
 
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
