@@ -14,6 +14,17 @@ module V1
           authenticate!
           @reqs = Request.where(sender_id: @current_user.user_id)
         end
+
+				desc "Receive opposite reply"
+				params do
+					requires :book_id, type: Integer, desc: "Book id"
+				end
+				put '/sent', jbuilder: 'empty' do
+          authenticate!
+          req = Request.find_by sender_id: @current_user.user_id, book_id: params[:book_id]
+					emit_error! "リクエストが存在しません", 400, 1 unless req
+					req.destroy
+				end
       end
     end
   end
