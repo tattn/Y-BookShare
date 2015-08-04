@@ -26,7 +26,7 @@ module V1
         data = { alert: 'test messsage', badge: 'Increment' }
         push = client.push(data)
         push.type = "ios"
-        query = client.query(Parse::Protocol::CLASS_INSTALLATION).eq('email', user.email)
+        query = client.query(Parse::Protocol::CLASS_INSTALLATION).eq('username', user.email)
         push.where = query.where
         push.save
 
