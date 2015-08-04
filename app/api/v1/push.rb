@@ -18,18 +18,18 @@ module V1
         PARSE_COM_APPLICATION_ID =  'n3giGyxTaQClMezovu0s6Zm2ZwtiVBD5TlLYOQKf'
         PARSE_COM_REST_API_KEY = 'WW8sO4UjrxAzSQuaeGaZGUCLEMGSTPzARwQvj550'
 
-        client = Parse.create application_id: PARSE_COM_APPLICATION_ID, api_key: PARSE_COM_REST_API_KEY, quiet: true
+        client = Parse.create application_id: PARSE_COM_APPLICATION_ID, api_key: PARSE_COM_REST_API_KEY, quiet: false
 
         user = User.find_by user_id:params[:user_id]
 
         data = { alert: 'test messsage', badge: 'Increment' }
         push = client.push(data)
         push.type = "ios"
-        query = client.query(Parse::Protocol::CLASS_USER).eq('username', user.email)
-        push.where = query.where
+        # query = client.query(Parse::Protocol::CLASS_USER).eq('username', user.email)
+        # push.where = query.where
         push.save
 
-        { status: 200 }
+        { status: 200, email:user.email }
       end
     end
   end
