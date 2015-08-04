@@ -137,7 +137,11 @@ module V1
                 authenticate!
 								if friend = Friend.find_by(user_id: params[:friend_id], friend_id: @current_user.user_id, accepted: false)
                   friend.update accepted: true
-                  Friend.create user_id: @current_user.user_id, friend_id: params[:friend_id], accepted: true
+                  if already_reqest = Friend.find_by(user_id: @current_user.user_id, friend_id: params[:friend_id])
+                    already_reqest.update accepted: true
+                  else
+                    Friend.create user_id: @current_user.user_id, friend_id: params[:friend_id], accepted: true
+                  end
                 end
               end
 
