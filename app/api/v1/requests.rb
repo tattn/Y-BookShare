@@ -14,6 +14,13 @@ module V1
           authenticate!
           @reqs = Request.where(sender_id: @current_user.user_id)
         end
+
+				desc "Receive opposite reply"
+				put '/sent', jbuilder: 'empty' do
+          authenticate!
+          reqs = Request.where(sender_id: @current_user.user_id)
+					reqs.destroy
+				end
       end
     end
   end
