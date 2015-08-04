@@ -188,7 +188,8 @@ module V1
         resource :request do
           get '/' , jbuilder: 'requests/requests' do
             authenticate!
-            @reqs = Request.where(user_id: params[:user_id])
+            black_ids = Blacklist.where(user_id: params[:user_id]).map(&:bother_id)
+            @reqs = Request.where(user_id: params[:user_id]) - Request.where(sender_id: black_ids)
           end
 
           params do
