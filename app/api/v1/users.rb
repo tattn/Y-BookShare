@@ -111,7 +111,7 @@ module V1
             delete '/', jbuilder: 'empty' do
               authenticate!
               friend = Friend.find_by user_id: @current_user.user_id, friend_id: params[:friend_id], accepted: true
-              partner = Friend.find_by  user_id: @current_user.user_id,friend_id: params[:user_id], accepted: true
+              partner = Friend.find_by  user_id: params[:friend_id], friend_id: @current_user.user_id, accepted: true
               emit_error! "存在しない友達", 400, 1 unless friend
               friend.destroy
               partner.destroy
