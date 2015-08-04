@@ -33,7 +33,7 @@ module V1
             if params[:due_date]
               Borrow.create user_id: @current_user.user_id, book_id: params[:book_id], lender_id: params[:lender_id], due_date: params[:due_date]
             else
-              Borrow.create user_id: params[:borrower_id], book_id: params[:book_id], lender_id: @curre.user_id
+              Borrow.create user_id: params[:borrower_id], book_id: params[:book_id], lender_id: @current_user.user_id
             end
             @borrow_book.update borrower_id: @current_user.user_id
           else
