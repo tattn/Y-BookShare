@@ -42,6 +42,7 @@ module V1
         optional :isbn, type: Integer, desc: "ISBN of the book."
         optional :amazon, type: Integer, desc: "search in amazon if this parameter exists"
         optional :start, type: Integer, default: 1, desc: "position of all results"
+        optional :sort, type: String, desc: "sort type"
       end
       get '/search', jbuilder: 'books/books' do        # jbuilderで出力する場合はこのように書く(参照: views/api)
         @books = []
@@ -73,6 +74,41 @@ module V1
             end
           end
 
+          if params[:sort]
+            sort_type = params[:sort].split(",")
+
+            if sort_type.include?("publication") && sort_type.include?("title")
+              @books.sort! { |book_a, book_b|
+                if book_a[:title].split(" ").first == book_b[:title].split(" ").first
+                  if book_a[:publication_date]
+                    publication_a = book_a[:publication_date]
+                  else
+                    publication_a = Date.new(3000, 1, 1)#if nil then last
+                  end
+
+                  if book_b[:publication_date]
+                    publication_b = book_b[:publication_date]
+                  else
+                    publication_b = Date.new(3000, 1, 1)#if nil then last
+                  end
+
+                  publication_a <=> publication_b
+                else
+                  book_a[:title].split(" ").first <=> book_b[:title].split(" ").first
+                end
+              }
+            elsif sort_type.include?("title")
+              @books.sort_by! { |books| books[:title]}
+            elsif sort_type.include?("publication")
+              @books.sort_by! { |books|
+                if books[:publication_date]
+                  books[:publication_date]
+                else
+                  Date.new(3000, 1, 1)#if nil then last
+                end
+              }
+            end
+          end
         end
       end
 

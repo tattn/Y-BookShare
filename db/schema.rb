@@ -40,7 +40,7 @@ ActiveRecord::Schema.define(version: 20150802142732) do
     t.string   "cover_image_url"
     t.datetime "created_at",                              null: false
     t.datetime "updated_at",                              null: false
-    t.integer  "salesrank"
+    t.integer  "salesrank",                  default: -1
     t.string   "amazon_url",                 default: ""
     t.date     "publication_date"
     t.string   "publisher",                  default: ""
@@ -101,8 +101,8 @@ ActiveRecord::Schema.define(version: 20150802142732) do
     t.string   "firstname",                    null: false
     t.string   "lastname",                     null: false
     t.string   "school"
-    t.integer  "lend_num"
-    t.integer  "borrow_num"
+    t.integer  "lend_num",        default: 0
+    t.integer  "borrow_num",      default: 0
     t.string   "comment",         default: ""
     t.string   "invitation_code",              null: false
     t.string   "password_digest"
