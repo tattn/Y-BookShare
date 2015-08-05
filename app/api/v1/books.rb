@@ -42,7 +42,7 @@ module V1
         optional :isbn, type: Integer, desc: "ISBN of the book."
         optional :amazon, type: Integer, desc: "search in amazon if this parameter exists"
         optional :start, type: Integer, default: 1, desc: "position of all results"
-        optional :sort, type: String, desc: "sort type"
+        optional :sort, type: String, default:"publication, title", desc: "sort type"
       end
       get '/search', jbuilder: 'books/books' do        # jbuilderで出力する場合はこのように書く(参照: views/api)
         @books = []
