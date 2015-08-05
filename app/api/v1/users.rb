@@ -260,6 +260,8 @@ module V1
             icon_name = params[:upload_file][:filename]
             icon_data = params[:upload_file][:tempfile]
 
+						emit_error! "ファイルサイズが大きすぎます", 400, 2 if icon_date.size >= 10.megabytes
+
             @current_user.update icon_name: icon_name, icon_data: icon_data.read
           end
         end
