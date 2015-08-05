@@ -140,6 +140,14 @@ module V1
             bookshelf = find_by_id params[:user_id], params[:book_id]
             return unless bookshelf
             bookshelf.destroy
+
+            timeline = Timeline.where(user_id: params[:user_id], type: "bookshelf")
+            timeline.each do |tl|
+              if tl.data["bookshelf"]["book_id"] == params[:book_id] then
+                tl.destroy
+              end
+            end
+
           end
         end
       end
