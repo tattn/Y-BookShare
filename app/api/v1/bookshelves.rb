@@ -42,38 +42,43 @@ module V1
           else
 						# 自動変更かレスポンスフィールドの命名規則の変更を考えたほうがいいかもしれない
             bookshelf = Bookshelf.create user_id: params[:user_id], book_id: params[:book_id], borrower_id: 0
-						data = bookshelf.attributes
-						data[:book] = Book.find_by(id: bookshelf.book_id).attributes
-						data[:book][:bookId] = data[:book].book_id
-						data[:book][:genreId] = data[:book].genre_id
-						data[:book][:coverImageUrl] = data[:book].cover_image_url
-						data[:book][:publicationDate] = data[:book].publication_date
-						data[:book][:amazonUrl] = data[:book].amazon_url
-						data[:book].delete :book_id
-						data[:book].delete :genre_id
-						data[:book].delete :cover_image_url
-						data[:book].delete :publication_date
-						data[:book].delete :amazon_url
-						data[:user] = User.find_by(user_id: bookshelf.user_id).attributes
-						data[:user][:userId] = data[:user].user_id
-						data[:user][:imageUrl] = data[:user].image_url
-						data[:user][:lendNum] = data[:user].lend_num
-						data[:user][:borrowNum] = data[:user].borrow_num
-						data[:user][:bookNum] = data[:user].book_num
-						data[:user].delete :user_id
-						data[:user].delete :image_url
-						data[:user].delete :lend_num
-						data[:user].delete :borrow_num
-						data[:user].delete :book_num
-						data[:book].delete "updated_at"
-						data[:book].delete "created_at"
-						data[:user].delete "updated_at"
-						data[:user].delete "created_at"
-						data[:user].delete "icon_name"
-						data[:user].delete "icon_data"
-						data.delete "updated_at"
-						data.delete "created_at"
-						add_timeline params[:user_id], "bookshelf", { bookshelf: data }
+						Jbuilder.key_format camelize: :lower
+						data = Jbuilder.encode do |json|
+							json.bookshelf bookshelf
+						end
+						# data = bookshelf.attributes
+						# data[:book] = Book.find_by(id: bookshelf.book_id).attributes
+						# data[:book][:bookId] = data[:book].book_id
+						# data[:book][:genreId] = data[:book].genre_id
+						# data[:book][:coverImageUrl] = data[:book].cover_image_url
+						# data[:book][:publicationDate] = data[:book].publication_date
+						# data[:book][:amazonUrl] = data[:book].amazon_url
+						# data[:book].delete :book_id
+						# data[:book].delete :genre_id
+						# data[:book].delete :cover_image_url
+						# data[:book].delete :publication_date
+						# data[:book].delete :amazon_url
+						# data[:user] = User.find_by(user_id: bookshelf.user_id).attributes
+						# data[:user][:userId] = data[:user].user_id
+						# data[:user][:imageUrl] = data[:user].image_url
+						# data[:user][:lendNum] = data[:user].lend_num
+						# data[:user][:borrowNum] = data[:user].borrow_num
+						# data[:user][:bookNum] = data[:user].book_num
+						# data[:user].delete :user_id
+						# data[:user].delete :image_url
+						# data[:user].delete :lend_num
+						# data[:user].delete :borrow_num
+						# data[:user].delete :book_num
+						# data[:book].delete "updated_at"
+						# data[:book].delete "created_at"
+						# data[:user].delete "updated_at"
+						# data[:user].delete "created_at"
+						# data[:user].delete "icon_name"
+						# data[:user].delete "icon_data"
+						# data.delete "updated_at"
+						# data.delete "created_at"
+						# add_timeline params[:user_id], "bookshelf", { bookshelf: data }
+						add_timeline params[:user_id], "bookshelf", data
           end
         end
 
