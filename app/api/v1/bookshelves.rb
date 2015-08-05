@@ -42,6 +42,10 @@ module V1
           else
 						# 自動変更かレスポンスフィールドの命名規則の変更を考えたほうがいいかもしれない
             bookshelf = Bookshelf.create user_id: params[:user_id], book_id: params[:book_id], borrower_id: 0
+						# Jbuilder.key_format camelize: :lower
+						# data = Jbuilder.encode do |json|
+						# 	json.bookshelf bookshelf
+						# end
 						data = bookshelf.attributes
 						data[:book] = Book.find_by(id: bookshelf.book_id).attributes
 						data[:book][:bookId] = data[:book].book_id
@@ -74,6 +78,7 @@ module V1
 						data.delete "updated_at"
 						data.delete "created_at"
 						add_timeline params[:user_id], "bookshelf", { bookshelf: data }
+						# add_timeline params[:user_id], "bookshelf", data
           end
         end
 
@@ -135,6 +140,14 @@ module V1
             bookshelf = find_by_id params[:user_id], params[:book_id]
             return unless bookshelf
             bookshelf.destroy
+
+            timeline = Timeline.where(user_id: params[:user_id], type: "bookshelf")
+            timeline.each do |tl|
+              if tl.data["bookshelf"]["book_id"] == params[:book_id] then
+                tl.destroy
+              end
+            end
+
           end
         end
       end

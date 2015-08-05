@@ -22,9 +22,10 @@ module V1
 
         user = User.find_by user_id:params[:user_id]
 
-        data = { alert: 'test messsage', badge: 'Increment' }
+        data = { alert: 'プッシュがうまくいかなーい' }
         push = client.push(data)
         push.type = "ios"
+				push.where = {}
         # query = client.query(Parse::Protocol::CLASS_USER).eq('username', user.email)
         # push.where = query.where
         push.save
