@@ -218,12 +218,12 @@ module V1
             end
             put '/', jbuilder: 'empty' do
               authenticate!
-              request = Request.find_by book_id: params[:book_id], user_id: params[:user_id]
+              request = Request.find_by book_id: params[:book_id], user_id: @current_user.user_id
               return unless request
               request.update accepted: params[:accepted]
 
 							if params[:accepted]
-								lender = User.find_by user_id: params[:user_id]
+								lender = User.find_by user_id: @current_user.user_id
 								borrower = User.find_by user_id: request.sender_id
 								lender.update lend_num: lender.lend_num + 1
 								borrower.update borrow_num: borrower.borrow_num + 1
